@@ -1,12 +1,7 @@
-
 import click
-from .database import SessionLocal, init_db
-from .models import User, WorkoutPlan, NutritionLog, FitnessGoal, FitnessMetric
-from datetime import datetime
 from .utils import (validate_date, format_nutrition_log, format_fitness_metric,
                     prompt_user_for_input, calculate_progress, motivation_feedback,
                     generate_workout_plan, recommend_schedule, schedule_workout, adjust_workout_plan)
-
 
 @click.group()
 def cli():
@@ -16,12 +11,16 @@ def cli():
 @cli.command()
 def init():
     """Initialize the database."""
+    from .database import init_db  # Moved import here
     init_db()
     click.echo("Database initialized.")
 
 @cli.command()
 def add_user():
     """Add a new user interactively."""
+    from .database import SessionLocal  # Moved import here
+    from .models import User  # Moved import here
+    
     name = prompt_user_for_input("Enter user name: ")
     fitness_level = prompt_user_for_input("Enter fitness level: ")
     
@@ -35,6 +34,9 @@ def add_user():
 @cli.command()
 def add_workout():
     """Add a workout plan for a user interactively."""
+    from .database import SessionLocal  # Moved import here
+    from .models import WorkoutPlan  # Moved import here
+
     user_id = prompt_user_for_input("Enter user ID: ")
     description = prompt_user_for_input("Enter workout description: ")
     
@@ -47,6 +49,9 @@ def add_workout():
 @cli.command()
 def log_nutrition():
     """Log nutrition data for a user interactively."""
+    from .database import SessionLocal  # Moved import here
+    from .models import NutritionLog  # Moved import here
+
     user_id = prompt_user_for_input("Enter user ID: ")
     date = prompt_user_for_input("Enter date (YYYY-MM-DD): ")
     food_item = prompt_user_for_input("Enter food item: ")
@@ -62,6 +67,9 @@ def log_nutrition():
 @cli.command()
 def add_goal():
     """Add a fitness goal for a user interactively."""
+    from .database import SessionLocal  # Moved import here
+    from .models import FitnessGoal  # Moved import here
+
     user_id = prompt_user_for_input("Enter user ID: ")
     goal_description = prompt_user_for_input("Enter goal description: ")
     target_date = prompt_user_for_input("Enter target date (YYYY-MM-DD): ")
@@ -76,6 +84,9 @@ def add_goal():
 @cli.command()
 def log_fitness_metric():
     """Log fitness metrics for a user interactively."""
+    from .database import SessionLocal  # Moved import here
+    from .models import FitnessMetric  # Moved import here
+
     user_id = prompt_user_for_input("Enter user ID: ")
     weight = prompt_user_for_input("Enter weight (kg): ")
     performance = prompt_user_for_input("Enter performance (units): ")
@@ -92,21 +103,20 @@ def check_progress():
     current_weight = prompt_user_for_input("Enter current weight (kg): ")
     target_weight = prompt_user_for_input("Enter target weight (kg): ")
 
-    # Calculate progress percentage
     try:
         progress = calculate_progress(int(current_weight), int(target_weight))
         click.echo(f"Progress: {progress:.2f}%")
-
-        # Provide motivational feedback
         feedback = motivation_feedback(int(current_weight), int(target_weight))
         click.echo(feedback)
-
     except ValueError as e:
         click.echo(f"Error: {e}")
 
 @cli.command()
 def view_goals():
     """View goals for a user interactively."""
+    from .database import SessionLocal  # Moved import here
+    from .models import FitnessGoal  # Moved import here
+
     user_id = prompt_user_for_input("Enter user ID: ")
     session = SessionLocal()
     goals = session.query(FitnessGoal).filter(FitnessGoal.user_id == user_id).all()
@@ -168,9 +178,6 @@ def adjust_plan():
     fitness_level = click.prompt("Enter your fitness level (beginner/intermediate/advanced)")
     adjusted_plan = adjust_workout_plan(username, fitness_level)
     click.echo(f"Adjusted Workout Plan for {username}: {adjusted_plan}")
-
-
-
 
 if __name__ == "__main__":
     cli()

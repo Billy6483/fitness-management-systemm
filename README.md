@@ -3,6 +3,7 @@ Fitness Management System CLI
 The Fitness Management System is a command-line interface (CLI) application designed to help users manage their fitness goals, workouts, nutrition logs, and overall health metrics. The application allows for easy interaction through prompts, providing a user-friendly experience.
 
 Features
+
 User Management
 
     Add User: Create a new user profile.
@@ -53,16 +54,16 @@ To install the dependencies, run:
 
 bash
 
-pipenv install click sqlalchemy alembic
+# pipenv install click sqlalchemy alembic
 
 Getting Started
 Clone the Repository
 
 bash
 
-git clone https://github.com/Billy6483/fitness-management-systemm.git
+# git clone https://github.com/Billy6483/fitness-management-systemm.git
 
-cd fitness-management-systemm
+# cd fitness-management-systemm
 
 Initialize the Database
 
