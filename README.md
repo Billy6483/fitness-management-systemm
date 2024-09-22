@@ -60,9 +60,9 @@ Clone the Repository
 
 bash
 
-git clone https://github.com/yourusername/fitness-management-system.git
+git clone https://github.com/Billy6483/fitness-management-systemm.git
 
-cd fitness-management-system
+cd fitness-management-systemm
 
 Initialize the Database
 
