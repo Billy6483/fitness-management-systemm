@@ -6,7 +6,7 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'users'
-    
+
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     fitness_level = Column(String, nullable=False)
@@ -16,20 +16,18 @@ class User(Base):
     nutrition_logs = relationship('NutritionLog', back_populates='user', cascade="all, delete-orphan")
     fitness_metrics = relationship('FitnessMetric', back_populates='user', cascade="all, delete-orphan")
 
-
 class WorkoutPlan(Base):
     __tablename__ = 'workout_plans'
-    
+
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     description = Column(String, nullable=False)
 
     user = relationship('User', back_populates='workouts')
 
-
 class FitnessGoal(Base):
     __tablename__ = 'fitness_goals'
-    
+
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     goal_description = Column(String, nullable=False)
@@ -37,10 +35,9 @@ class FitnessGoal(Base):
 
     user = relationship('User', back_populates='goals')
 
-
 class NutritionLog(Base):
     __tablename__ = 'nutrition_logs'
-    
+
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     date = Column(Date, nullable=False)
@@ -49,13 +46,12 @@ class NutritionLog(Base):
 
     user = relationship('User', back_populates='nutrition_logs')
 
-
 class FitnessMetric(Base):
     __tablename__ = 'fitness_metrics'
-    
+
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    weight = Column(Integer)
-    performance = Column(Integer)
+    weight = Column(Integer, nullable=False)
+    performance = Column(Integer, nullable=False)
 
     user = relationship('User', back_populates='fitness_metrics')

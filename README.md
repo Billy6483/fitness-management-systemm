@@ -79,32 +79,8 @@ You can access the CLI commands using:
 
 bash
 
-# pipenv run python -m app.cli [COMMAND]
+# python -m app.cli run
 
-Replace [COMMAND] with one of the following:
-
-    add-user
-    add-workout
-    log-nutrition
-    add-goal
-    log-fitness-metric
-    check-progress
-    view-goals
-    injury-tips
-    generate-plan
-    recommend-workout-schedule
-    schedule-workout-command
-    adjust-plan
-
-Example Usage
-
-To add a user, run:
-
-bash
-
-# pipenv run python -m app.cli add-user
-
-Follow the prompts to add a user.
 
 Database Migration
 
