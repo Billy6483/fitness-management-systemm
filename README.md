@@ -63,8 +63,13 @@ bash
 
 # git clone https://github.com/Billy6483/fitness-management-systemm.git
 
-# cd fitness-management-systemm
+# cd fitness-management-systemm 
 
+# Activate the virtual environment
+
+pipenv shell
+
+ 
 Initialize the Database
 
 To set up the SQLite database, run:
@@ -88,7 +93,6 @@ Initial Migration Setup
 To create the initial database migration, run:
 
 bash
-
 pipenv run python -m alembic revision --autogenerate -m "Initial migration"
 
 Applying Migrations
