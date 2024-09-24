@@ -85,6 +85,24 @@ You can access the CLI commands using:
 bash
 
 # python -m app.cli run
+ 
+ 
+Choose an action:
+1. Add User
+2. Add Workout Plan
+3. Log Nutrition
+4. Add Fitness Goal
+5. Log Fitness Metric
+6. Check Progress
+7. View Goals
+8. Injury Tips
+9. Generate Workout Plan
+10. Recommend Workout Schedule
+11. Schedule Workout
+12. Adjust Workout Plan
+13. View User Details
+0. Exit
+Enter your choice: 
 
 
 Database Migration

@@ -1,4 +1,5 @@
 import click
+import os
 from .database import init_db, SessionLocal
 from .models import User, WorkoutPlan, FitnessGoal, NutritionLog, FitnessMetric
 from datetime import datetime
@@ -21,34 +22,43 @@ def run():
         choice = prompt_user_choice()
         
         if choice == 1:
-            click.echo(add_user())
+            display_output(add_user())
         elif choice == 2:
-            click.echo(add_workout())
+            display_output(add_workout())
         elif choice == 3:
-            click.echo(log_nutrition())
+            display_output(log_nutrition())
         elif choice == 4:
-            click.echo(add_goal())
+            display_output(add_goal())
         elif choice == 5:
-            click.echo(log_fitness_metric())
+            display_output(log_fitness_metric())
         elif choice == 6:
-            click.echo(check_progress())
+            display_output(check_progress())
         elif choice == 7:
-            click.echo(view_goals())
+            display_output(view_goals())
         elif choice == 8:
-            injury_tips()
+            display_output(injury_tips())
         elif choice == 9:
-            click.echo(generate_plan())
+            display_output(generate_plan())
         elif choice == 10:
-            click.echo(recommend_workout_schedule())
+            display_output(recommend_workout_schedule())
         elif choice == 11:
-            click.echo(schedule_workout_command())
+            display_output(schedule_workout_command())
         elif choice == 12:
-            click.echo(adjust_plan())
+            display_output(adjust_plan())
+        elif choice == 13:
+            user_id = click.prompt("Enter user ID to view details", type=int)
+            display_output(view_user_details(user_id))
         elif choice == 0:
             click.echo("Exiting the program.")
             break
         else:
             click.echo("Invalid choice, please try again.")
+        
+        pause()
+
+def pause():
+    """Pause and wait for user input."""
+    input("Press Enter to continue...")
 
 def prompt_user_choice():
     """Prompt the user to choose an action."""
@@ -65,8 +75,62 @@ def prompt_user_choice():
     click.echo("10. Recommend Workout Schedule")
     click.echo("11. Schedule Workout")
     click.echo("12. Adjust Workout Plan")
+    click.echo("13. View User Details")
     click.echo("0. Exit")
     return click.prompt("Enter your choice", type=int)
+
+def display_output(output):
+    """Display the output of a command without clearing previous outputs."""
+    click.echo("\n" + output)
+
+# User details function
+def view_user_details(user_id):
+    """Retrieve and display all details for a user."""
+    session = SessionLocal()
+    
+    user = session.query(User).filter(User.id == user_id).first()
+    if not user:
+        return f"No user found with ID {user_id}."
+
+    output = [f"User: {user.name}, Fitness Level: {user.fitness_level}"]
+    
+    # Goals
+    goals = session.query(FitnessGoal).filter(FitnessGoal.user_id == user_id).all()
+    output.append("Goals:")
+    if goals:
+        for goal in goals:
+            output.append(f"- {goal.goal_description} by {goal.target_date}")
+    else:
+        output.append("No goals found.")
+
+    # Progress
+    metrics = session.query(FitnessMetric).filter(FitnessMetric.user_id == user_id).all()
+    if metrics:
+        latest_metric = metrics[-1]  # Assuming metrics are sorted by date
+        output.append(f"Latest Progress: Weight: {latest_metric.weight} kg, Performance: {latest_metric.performance} units")
+    else:
+        output.append("No fitness metrics logged.")
+
+    # Nutrition Logs
+    nutrition_logs = session.query(NutritionLog).filter(NutritionLog.user_id == user_id).all()
+    output.append("Nutrition Logs:")
+    if nutrition_logs:
+        for log in nutrition_logs:
+            output.append(f"- {log.date}: {log.food_item} - {log.calories} calories")
+    else:
+        output.append("No nutrition logs found.")
+
+    # Workout Plans
+    workouts = session.query(WorkoutPlan).filter(WorkoutPlan.user_id == user_id).all()
+    output.append("Workout Plans:")
+    if workouts:
+        for workout in workouts:
+            output.append(f"- {workout.description}")
+    else:
+        output.append("No workout plans found.")
+
+    session.close()
+    return "\n".join(output)
 
 def add_user():
     name = prompt_user_for_input("Enter user name: ")
@@ -126,13 +190,14 @@ def log_fitness_metric():
     return format_fitness_metric(int(weight), int(performance))
 
 def check_progress():
+    user_id = prompt_user_for_input("Enter user ID: ")
     current_weight = prompt_user_for_input("Enter current weight (kg): ")
     target_weight = prompt_user_for_input("Enter target weight (kg): ")
 
     try:
         progress = calculate_progress(int(current_weight), int(target_weight))
         feedback = motivation_feedback(int(current_weight), int(target_weight))
-        return f"Progress: {progress:.2f}%. {feedback}"
+        return f"Progress for user ID {user_id}: {progress:.2f}%. {feedback}"
     except ValueError as e:
         return f"Error: {e}"
 
@@ -157,9 +222,9 @@ def injury_tips():
         "Gradually increase workout intensity.",
         "Include rest days in your routine."
     ]
-    click.echo("Injury Prevention Tips:")
-    for tip in tips:
-        click.echo(f"- {tip}")
+    output = ["Injury Prevention Tips:"]
+    output.extend(f"- {tip}" for tip in tips)
+    return "\n".join(output)
 
 def generate_plan():
     fitness_level = click.prompt("Enter your fitness level (beginner/intermediate/advanced)")
