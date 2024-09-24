@@ -101,7 +101,7 @@ Choose an action:
 11. Schedule Workout
 12. Adjust Workout Plan
 13. View User Details
-0. Exit
+ 0.  Exit
 Enter your choice: 
 
 
@@ -141,7 +141,12 @@ bash
 
  pipenv run python -m alembic history
 
+
+
+
+
 Contributing
+
 Contributions are welcome! Feel free to open an issue or submit a pull request to enhance the functionality of the application.
 
 License
